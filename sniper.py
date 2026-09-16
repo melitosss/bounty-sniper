@@ -64,7 +64,7 @@ def analizza_taglie(lista_problemi):
 
 
 if __name__ == "__main__":
-    print("🤖 Cecchino avviato. Inizializzazione memoria...")
+    print("Avvio in corso. Inizializzazione memoria...")
     inizializza_database() # Prepariamo il database
     
     lista_grezza = cerca_problemi("python")
@@ -78,7 +78,7 @@ if __name__ == "__main__":
             taglie_nuove.append(taglia)
             
     if taglie_nuove:
-        testo_notifica = f"🎯 <b>Trovate {len(taglie_nuove)} NUOVE task in Python!</b>\n\n"
+        testo_notifica = f"<b>Trovate {len(taglie_nuove)} NUOVE task in Python!</b>\n\n"
         
         # 1. Costruiamo il messaggio e mandiamo su Telegram SOLO le prime 3
         for i in range(min(3, len(taglie_nuove))):
@@ -93,6 +93,6 @@ if __name__ == "__main__":
             id_univoco = taglia.get("id")
             segna_come_inviata(id_univoco)
             
-        print(f"✅ Inviato riassunto su Telegram. Salvate {len(taglie_nuove)} task nel database per non scordarle.")
+        print(f"Inviato riassunto su Telegram. Salvate {len(taglie_nuove)} task nel database per non scordarle.")
     else:
-        print("📭 Nessuna nuova task trovata rispetto all'ultimo controllo. Riposo.")
+        print("Nessuna nuova task trovata rispetto all'ultimo controllo. Riposo.")

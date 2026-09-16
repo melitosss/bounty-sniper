@@ -1,0 +1,40 @@
+name: Bounty Sniper Automazione
+
+# Quando deve accendersi il server?
+on:
+  schedule:
+    - cron: '0 * * * *' # Si accende al minuto zero di ogni ora (es. 14:00, 15:00)
+  workflow_dispatch: # Questo ci permette di accenderlo a mano con un tasto dal sito web!
+
+jobs:
+  esegui-bot:
+    runs-on: ubuntu-latest # Usa un server Linux gratuito
+    permissions:
+      contents: write # Diamo il permesso al bot di salvare la memoria nel repository
+
+    steps:
+      - name: 1. Estrai il codice dal repository
+        uses: actions/checkout@v4
+
+      - name: 2. Prepara l'ambiente Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+
+      - name: 3. Installa le librerie
+        run: pip install -r requirements.txt
+
+      - name: 4. Avvia il Cecchino e inietta le chiavi segrete
+        env:
+          TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+        run: python sniper.py
+
+      - name: 5. Salva la Memoria nel Cloud
+        # Questo comando dice al server di prendere il db aggiornato e salvarlo su GitHub
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git add memoria.db
+          git commit -m "🤖 Memoria aggiornata dal Cloud" || echo "Nessuna novità da salvare"
+          git push
